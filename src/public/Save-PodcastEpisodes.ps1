@@ -3,10 +3,10 @@
 Downloads enclosures from a podcast feed.
 
 .LINK
-Save-WebRequest.ps1
+Save-WebRequest
 
 .EXAMPLE
-Save-PodcastEpisodes.ps1 https://www.youlooknicetoday.com/rss -UseTitle
+Save-PodcastEpisodes https://www.youlooknicetoday.com/rss -UseTitle
 
 Downloads podcast episodes to the current directory.
 #>
@@ -38,6 +38,7 @@ Process
 	if($PSBoundParameters.ContainsKey('Before')) {[object[]] $episodes = $episodes |Where-Object published -lt $Before}
 	if($PSBoundParameters.ContainsKey('First')) {[object[]] $episodes = $episodes |Sort-Object published |Select-Object -First $First}
 	if($PSBoundParameters.ContainsKey('Last')) {[object[]] $episodes = $episodes |Sort-Object published |Select-Object -Last $Last}
+	#TODO: Add or replace dependency.
 	if($CreateFolder) {New-Item ($channel.title |ConvertTo-FileName.ps1) -ItemType Directory -EA Ignore |Push-Location}
 	$i,$max = 0,($episodes.Count/100)
 	foreach($episode in $episodes)
@@ -53,6 +54,7 @@ Process
 		if($UseTitle)
 		{
 			$filename = if($episode.PSObject.Properties.Match('episode')) {$episode.episode + ' '} else {''}
+			#TODO: Add or replace dependencies.
 			$filename += $title |ConvertTo-FileName.ps1
 			$filename += Split-Uri.ps1 $episode.enclosure.url -Extension
 			Invoke-WebRequest $episode.enclosure.url -OutFile $filename
@@ -60,7 +62,7 @@ Process
 		}
 		else
 		{
-			Save-WebRequest.ps1 $episode.enclosure.url -CreationTime $episode.published
+			Save-WebRequest $episode.enclosure.url -CreationTime $episode.published
 		}
 	}
 	if($CreateFolder) {Pop-Location}

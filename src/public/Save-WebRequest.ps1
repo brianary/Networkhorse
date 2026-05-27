@@ -30,12 +30,11 @@ Invoke-Item
 Move-Item
 
 .EXAMPLE
-Save-WebRequest.ps1 https://www.irs.gov/pub/irs-pdf/f1040.pdf -Open
+Save-WebRequest https://www.irs.gov/pub/irs-pdf/f1040.pdf -Open
 
 Saves f1040.pdf (or else a filename specified in the Content-Disposition header) and opens it.
 #>
 
-using namespace System.Net.Mime
 [CmdletBinding()][OutputType([void])] Param(
 # The URL to download.
 [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
@@ -67,6 +66,7 @@ Begin
 			[ContentDisposition] $disposition = $response.Headers['Content-Disposition'][0]
 			$suggestion = $disposition.FileName |Split-Path -Leaf
 		}
+		#TODO: Add or replace dependencies.
 		if($suggestion) {return $suggestion |ConvertTo-FileName.ps1}
 		elseif($null -ne $Uri.Segments -and $Uri.Segments.Count -gt 0) {return $Uri.Segments[-1] |ConvertTo-FileName.ps1}
 		elseif($Uri.Host) {return '{0}.saved' -f $Uri.Host |ConvertTo-FileName.ps1}
@@ -78,7 +78,7 @@ Process
 	$filename = Get-FileName $Uri
 	if($OutDirectory) {$filename = Join-Path $OutDirectory $filename}
 	$response = Invoke-WebRequest $Uri -OutFile $filename -PassThru
-	Write-Info.ps1 "Saved to '$filename'" -fg Green
+	Write-Information "Saved to '$filename'"
 	if($PSBoundParameters.ContainsKey('CreationTime')) {(Get-Item $filename).CreationTime = $CreationTime}
 	if($PSBoundParameters.ContainsKey('LastWriteTime')) {(Get-Item $filename).LastWriteTime = $LastWriteTime}
 	elseif($response.Headers['Last-Modified'] -is [string[]] -and $response.Headers['Last-Modified'].Count -gt 0)

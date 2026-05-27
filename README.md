@@ -24,4 +24,4 @@ Useful https and network utilities.
 - [Save-WebRequest](https://github.com/brianary/Networkhorse/wiki/Save-WebRequest): Downloads a given URL to a file, automatically determining the filename.
 - [Show-HttpStatus](https://github.com/brianary/Networkhorse/wiki/Show-HttpStatus): Displays the HTTP status code info.
 - [Test-HttpSecurity](https://github.com/brianary/Networkhorse/wiki/Test-HttpSecurity): Scan sites using Mozilla's Observatory.
-- [Trace-WebRequest](https://github.com/brianary/Networkhorse/wiki/Trace-WebRequest): Provides details about a retrieving a URI.
+- [Trace-WebRequest](./src/public/Trace-WebRequest.ps1): <!-- ERROR: Unable to find type [HttpMethod]. -->

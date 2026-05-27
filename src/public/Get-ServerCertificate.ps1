@@ -1,15 +1,12 @@
-<#
+﻿<#
 .SYNOPSIS
 Returns the certificate provided by the requested server.
 
 .FUNCTIONALITY
 TLS/SSL
 
-.LINK
-Use-Command.ps1
-
 .EXAMPLE
-Get-ServerCertificate.ps1 webcoder.info
+Get-ServerCertificate webcoder.info
 
 Server      : webcoder.info
 Subject     : CN=webcoder.info
@@ -22,15 +19,13 @@ Extensions  : {[Subject Alternative Name, DNS Name=...
 Chain       : System.Security.Cryptography.X509Certificates.X509Chain
 #>
 
-#Requires -Version 7
-using namespace System.Security.Cryptography
-using namespace System.Security.Cryptography.X509Certificates
 [CmdletBinding()] Param(
 # The server (hostname) to return the TLS/SSL certificate from.
 [Parameter(Position=0,Mandatory=$true,ValueFromRemainingArguments=$true)][string[]] $Server
 )
 Begin
 {
+	#TODO: Add or replace dependency.
 	Use-Command.ps1 openssl "$env:SystemRoot\openssl.exe" -cinst openssl.light
 
 	filter Get-ServerCertificate

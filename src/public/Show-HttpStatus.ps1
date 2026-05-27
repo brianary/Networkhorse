@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Displays the HTTP status code info.
 
@@ -6,13 +6,12 @@ Displays the HTTP status code info.
 HTTP
 
 .EXAMPLE
-Show-HttpStatus.ps1 ServiceUnavailable -AsCat
+Show-HttpStatus ServiceUnavailable -AsCat
 
 .EXAMPLE
-Show-HttpStatus.ps1 200 -AsCat
+Show-HttpStatus 200 -AsCat
 #>
 
-#Requires -Version 3
 [CmdletBinding()] Param(
 # The HTTP status code to describe.
 [Parameter(Position=0,Mandatory=$true)][Net.HttpStatusCode] $Status,

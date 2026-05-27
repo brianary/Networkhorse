@@ -24,7 +24,7 @@ https://weblog.west-wind.com/posts/2010/Feb/18/NET-WebRequestPreAuthenticate-not
 https://powershell.org/forums/topic/pscredential-parameter-help/
 
 .EXAMPLE
-Invoke-RestMethod https://example.com/api/items -Method Get -Headers @{Authorization=ConvertTo-BasicAuthentication.ps1 (Get-Credential -Message 'Log in')}
+Invoke-RestMethod https://example.com/api/items -Method Get -Headers @{Authorization=ConvertTo-BasicAuthentication (Get-Credential -Message 'Log in')}
 
 Calls a REST method that requires Basic authentication on the first request (with no challenge-response support).
 #>

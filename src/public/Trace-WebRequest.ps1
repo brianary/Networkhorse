@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Provides details about a retrieving a URI.
 
@@ -11,17 +11,8 @@ System.Uri to retrieve.
 .FUNCTIONALITY
 HTTP
 
-.LINK
-Import-CharConstants.ps1
-
-.LINK
-Write-Info.ps1
-
-.LINK
-Import-Variables.ps1
-
 .EXAMPLE
-Trace-WebRequest.ps1 g.co/p3phelp -SkipHeaders -SkipContent
+Trace-WebRequest g.co/p3phelp -SkipHeaders -SkipContent
 
 g.co is CN=*.google.com from CN=WR2, O=Google Trust Services, C=US
 Valid 05/12/2025 01:42:58 to 08/04/2025 01:42:57
@@ -40,7 +31,6 @@ GET https://support.google.com/accounts/?hl=en&visit_id=638845176026805186-29074
 HTTP/1.1 200 OK
 #>
 
-using namespace System.Net.Http
 [CmdletBinding()] Param(
 # The URL to retrieve.
 [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
@@ -57,6 +47,7 @@ using namespace System.Net.Http
 Begin
 {
     $certhost = @{}
+	#TODO: Add or replace dependency.
     Import-CharConstants.ps1 :lock: :outbox_tray: :inbox_tray: :information_source: 'timer clock' -AsEmoji
 
     filter Get-HttpStatusColor
@@ -85,17 +76,17 @@ Begin
         )
         if(!$certhost.Contains($Uri.Host))
         {
-            $certinfo = Get-ServerCertificate.ps1 $Uri.Host
+            $certinfo = Get-ServerCertificate $Uri.Host
             $certhost[$Uri.Host] = $certinfo
-            Write-Info.ps1 "$lock $($Uri.Host) is $($certinfo.Subject) from $($certinfo.Issuer)" -fg Magenta
-            Write-Info.ps1 "${timer clock} Valid $($certinfo.Issued) to $($certinfo.Expires)" -fg DarkMagenta
+            Write-Information "$lock $($Uri.Host) is $($certinfo.Subject) from $($certinfo.Issuer)" #-fg Magenta
+            Write-Information "${timer clock} Valid $($certinfo.Issued) to $($certinfo.Expires)" #-fg DarkMagenta
         }
         $request = New-Object Net.Http.HttpRequestMessage -ArgumentList $Method, $Uri
         $requestLine, $requestRawHeaders = "$Method $Uri", ($request.Headers.ToString())
         Write-Verbose $requestLine
         Write-Verbose $requestRawHeaders
-        Write-Info.ps1 "$outbox_tray $requestLine" -fg DarkGreen
-        #Write-Info.ps1 $requestRawHeaders -fg DarkGray
+        Write-Information "$outbox_tray $requestLine" #-fg DarkGreen
+        #Write-Information $requestRawHeaders #-fg DarkGray
         if($LogFile)
         {@"
 ###
@@ -106,7 +97,7 @@ $requestRawHeaders
         Write-Debug $requestLine
         $StatusCode = 0
         Invoke-WebRequest -Uri $Uri -SkipHttpErrorCheck -MaximumRedirection 0 -AllowInsecureRedirect -EA Ignore |
-            Import-Variables.ps1
+            Import-Variables.ps1 #TODO: Add or replace dependency.
         if(!$StatusCode)
         {
             if($LogFile)
@@ -121,9 +112,9 @@ $requestRawHeaders
         if($null -eq $rawHeaders) {$rawHeaders = ''}
         Write-Verbose $statusLine
         Write-Verbose $rawHeaders
-        Write-Info.ps1 "$inbox_tray $statusLine" -fg (Get-HttpStatusColor $StatusCode)
-        if(!$SkipHeaders) {Write-Info.ps1 $rawHeaders -fg Gray}
-        if(!$SkipContent -and $Content) {Write-Info.ps1 $Content -fg White}
+        Write-Information "$inbox_tray $statusLine" #-fg (Get-HttpStatusColor $StatusCode)
+        if(!$SkipHeaders) {Write-Information $rawHeaders} # -fg Gray}
+        if(!$SkipContent -and $Content) {Write-Information $Content} # -fg White}
         if($LogFile)
         {@"
 ###
@@ -135,7 +126,7 @@ $RawContent
         {
             foreach($location in $Headers.Location |ForEach-Object {New-Object Uri $Uri,$_})
             {
-                Write-Info.ps1 "$information_source Following redirect to $location" -fg DarkBlue
+                Write-Information "$information_source Following redirect to $location" #-fg DarkBlue
                 Trace-Uri $location
             }
         }

@@ -15,7 +15,7 @@ Invoke-RestMethod
 https://observatory.mozilla.org/
 
 .EXAMPLE
-Test-HttpSecurity.ps1 www.example.net -Public
+Test-HttpSecurity www.example.net -Public
 
 end_time             : Thu, 22 Dec 2016 00:09:31 GMT
 grade                : F
@@ -37,7 +37,7 @@ results              : https://http-observatory.security.mozilla.org/api/v1/getS
 host                 : www.example.net
 
 .EXAMPLE
-Test-HttpSecurity.ps1 www.example.com -IncludeResults
+Test-HttpSecurity www.example.com -IncludeResults
 
 end_time             : Thu, 22 Dec 2016 16:17:17 GMT
 grade                : F
@@ -61,7 +61,6 @@ results              : @{content-security-policy=; contribute=; cookies=; cross-
 host                 : www.example.com
 #>
 
-#Requires -Version 3
 [CmdletBinding()][OutputType([psobject])] Param(
 # Hostnames to scan, e.g. www.example.org
 [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)][string[]]$Hosts,

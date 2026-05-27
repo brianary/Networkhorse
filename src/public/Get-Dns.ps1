@@ -13,7 +13,7 @@ System.String of network addresses found.
 https://msdn.microsoft.com/library/ms143998.aspx
 
 .EXAMPLE
-Get-Dns.ps1 www.google.com
+Get-Dns www.google.com
 
 HostName       Aliases AddressList
 --------       ------- -----------

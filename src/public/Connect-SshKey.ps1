@@ -3,10 +3,9 @@
 Uses OpenSSH to generate a key and connect it to an ssh server.
 
 .EXAMPLE
-Connect-SshKey.ps1 crowpi -UserName pi
+Connect-SshKey crowpi -UserName pi
 #>
 
-#Requires -Version 3
 [CmdletBinding()] Param(
 # The ssh server to connect to.
 [Parameter(Position=0,Mandatory=$true)][string] $HostName,
@@ -16,6 +15,7 @@ Connect-SshKey.ps1 crowpi -UserName pi
 
 if(!(Test-Path $env:USERPROFILE\.ssh\id_rsa.pub -Type Leaf) -or !((Get-Item $env:USERPROFILE\.ssh\id_rsa.pub).Length))
 {
+	#TODO: Add or replace dependency.
 	Use-Command.ps1 ssh-keygen "$env:SystemRoot\system32\openssh\ssh-keygen.exe" -WindowsFeature 'OpenSSH.Client~~~~0.0.1.0'
 	ssh-keygen
 }

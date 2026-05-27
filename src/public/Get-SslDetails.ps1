@@ -19,11 +19,8 @@ https://msdn.microsoft.com/library/system.security.authentication.sslprotocols.a
 .LINK
 https://msdn.microsoft.com/library/system.net.security.sslstream.authenticateasclient.aspx
 
-.LINK
-Get-EnumValues.ps1
-
 .EXAMPLE
-Get-SslDetails.ps1 -ComputerName www.google.com
+Get-SslDetails -ComputerName www.google.com
 
 ComputerName       : www.google.com
 Port               : 443
@@ -38,7 +35,6 @@ Tls11              : Aes128
 Tls12              : Aes128
 #>
 
-#Requires -Version 3
 [CmdletBinding()][OutputType([Management.Automation.PSCustomObject])] Param(
 # The name of the remote computer to connect to.
 [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ValueFromPipeline=$true)]
@@ -46,6 +42,7 @@ Tls12              : Aes128
 # The remote port to connect to.
 [Parameter(ValueFromPipelineByPropertyName=$true)][int]$Port = 443
 )
+#TODO: Add or replace dependency.
 Begin {$protocols = Get-EnumValues.ps1 Security.Authentication.SslProtocols |Where-Object Name -notin 'None','Default' |Select-Object -ExpandProperty Name}
 Process
 {

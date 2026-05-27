@@ -20,7 +20,7 @@ https://content-security-policy.com/
 Invoke-WebRequest
 
 .EXAMPLE
-Invoke-WebRequest http://example.org/ |Get-ContentSecurityPolicy.ps1
+Invoke-WebRequest http://example.org/ |Get-ContentSecurityPolicy
 
 default-src : {http://example.org, http://example.net, 'self'}
 script-src  : {'self'}
@@ -28,7 +28,6 @@ img-src     : {'self'}
 report-uri  : {http://example.com/csp}
 #>
 
-#Requires -Version 3
 [CmdletBinding()][OutputType([Management.Automation.PSCustomObject])] Param(
 # The URL to get the policy from.
 [Parameter(ParameterSetName='Uri',Position=0,Mandatory=$true,ValueFromPipelineByPropertyName=$true)]

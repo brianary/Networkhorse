@@ -24,12 +24,11 @@ Invoke-RestMethod
 New-Guid
 
 .EXAMPLE
-@{ title = 'Name'; file = Get-Item avatar.png } |ConvertTo-MultipartFormData.ps1 |Invoke-WebRequest $url -Method POST
+@{ title = 'Name'; file = Get-Item avatar.png } |ConvertTo-MultipartFormData |Invoke-WebRequest $url -Method POST
 
 Sends two fields, one of which is a file upload.
 #>
 
-#Requires -Version 3
 [CmdletBinding()][OutputType([byte[]])] Param(
 <#
 The fields to pass, as a Hashtable or other dictionary.
