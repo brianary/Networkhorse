@@ -2,7 +2,7 @@
 Output demo.gif
 Hide
 Set Shell pwsh
-Type "Import-Module ../src/.publish/Networkhorse.psd1"
+Type "Import-Module ../.publish/Networkhorse.psd1"
 Enter
 Type "Clear-Host"
 Enter
