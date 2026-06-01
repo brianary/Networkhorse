@@ -5,9 +5,6 @@ Tests producing a basic authentication header string from a credential.
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText','',
 Justification='These are tests.')] Param()
-$basename = "$(($MyInvocation.MyCommand.Name -split '\.',2)[0])."
-$skip = !(Test-Path .changes -Type Leaf) ? $false :
-	!@(Get-Content .changes |Get-Item |Select-Object -ExpandProperty Name |Where-Object {$_.StartsWith($basename)})
 if(!(&"$PSScriptRoot/../scripts/Test-RelevantTest.ps1")) {return}
 BeforeAll {
 	Set-StrictMode -Version Latest
@@ -27,8 +24,8 @@ Describe 'ConvertTo-BasicAuthentication' -Tag ConvertTo-BasicAuthentication -Ski
 		) {
 			Param([string]$UserName,[string]$SingleFactor,[string]$Result)
 			$credential = New-Object pscredential $UserName,(ConvertTo-SecureString $SingleFactor -AsPlainText -Force)
-			ConvertTo-BasicAuthentication.ps1 $credential |Should -BeExactly $Result -Because 'parameter should work'
-			$credential |ConvertTo-BasicAuthentication.ps1 |Should -BeExactly $Result -Because 'pipeline should work'
+			ConvertTo-BasicAuthentication $credential |Should -BeExactly $Result -Because 'parameter should work'
+			$credential |ConvertTo-BasicAuthentication |Should -BeExactly $Result -Because 'pipeline should work'
 		}
 	}
 }
