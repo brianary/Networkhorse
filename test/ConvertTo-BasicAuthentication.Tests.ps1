@@ -11,10 +11,6 @@ BeforeAll {
 	&"$PSScriptRoot/../scripts/Import-ThisModule.ps1"
 }
 Describe 'ConvertTo-BasicAuthentication' -Tag ConvertTo-BasicAuthentication -Skip:$skip {
-	BeforeAll {
-		$scriptsdir,$sep = (Split-Path $PSScriptRoot),[io.path]::PathSeparator
-		if($scriptsdir -notin ($env:Path -split $sep)) {$env:Path += "$sep$scriptsdir"}
-	}
 	Context 'Produces a basic authentication header string from a credential' `
 		-Tag ConvertToBasicAuthentication,Convert,ConvertTo,BasicAuthentication,Authentication,Credential {
 		It "Credential '<UserName>' with password '<SingleFactor>' should return '<Result>'" -TestCases @(
@@ -28,4 +24,7 @@ Describe 'ConvertTo-BasicAuthentication' -Tag ConvertTo-BasicAuthentication -Ski
 			$credential |ConvertTo-BasicAuthentication |Should -BeExactly $Result -Because 'pipeline should work'
 		}
 	}
+}
+AfterAll {
+	&"$PSScriptRoot/../scripts/Remove-ThisModule.ps1"
 }

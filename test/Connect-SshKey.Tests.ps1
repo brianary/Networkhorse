@@ -3,19 +3,12 @@
 Tests using OpenSSH to generate a key and connect it to an ssh server.
 #>
 
-$basename = "$(($MyInvocation.MyCommand.Name -split '\.',2)[0])."
-$skip = !(Test-Path .changes -Type Leaf) ? $false :
-	!@(Get-Content .changes |Get-Item |Select-Object -ExpandProperty Name |Where-Object {$_.StartsWith($basename)})
 if(!(&"$PSScriptRoot/../scripts/Test-RelevantTest.ps1")) {return}
 BeforeAll {
 	Set-StrictMode -Version Latest
 	&"$PSScriptRoot/../scripts/Import-ThisModule.ps1"
 }
 Describe 'Connect-SshKey' -Tag Connect-SshKey -Skip:$skip {
-	BeforeAll {
-		$scriptsdir,$sep = (Split-Path $PSScriptRoot),[io.path]::PathSeparator
-		if($scriptsdir -notin ($env:Path -split $sep)) {$env:Path += "$sep$scriptsdir"}
-	}
 	BeforeEach {
 		Mock ssh-keygen {
 			Write-Information 'ssh-keygen called' -infa Continue
@@ -43,4 +36,7 @@ Describe 'Connect-SshKey' -Tag Connect-SshKey -Skip:$skip {
 			catch {Write-Information 'Unable to test ssh mock' -infa Continue}
 		}
 	}
+}
+AfterAll {
+	&"$PSScriptRoot/../scripts/Remove-ThisModule.ps1"
 }

@@ -9,10 +9,6 @@ BeforeAll {
 	&"$PSScriptRoot/../scripts/Import-ThisModule.ps1"
 }
 Describe 'ConvertTo-MultipartFormData' -Tag ConvertTo-MultipartFormData -Skip:$skip {
-	BeforeAll {
-		$scriptsdir,$sep = (Split-Path $PSScriptRoot),[io.path]::PathSeparator
-		if($scriptsdir -notin ($env:Path -split $sep)) {$env:Path += "$sep$scriptsdir"}
-	}
 	Context 'Creates multipart/form-data to send as a request body' `
 		-Tag ConvertToMultipartFormData,Convert,ConvertTo,MultipartFormData,WebRequest {
 		Mock New-Guid {return [guid]'d9b96b2b-e95d-4051-86fa-81a4b98a6dda'}
@@ -38,4 +34,7 @@ Describe 'ConvertTo-MultipartFormData' -Tag ConvertTo-MultipartFormData -Skip:$s
 			$FormValues.Keys |ForEach-Object {$textresult |Should -BeLikeExactly "*Content-Disposition: form-data; name=$_*"}
 		}
 	}
+}
+AfterAll {
+	&"$PSScriptRoot/../scripts/Remove-ThisModule.ps1"
 }
