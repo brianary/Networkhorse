@@ -52,11 +52,11 @@ Begin
 		$name = $Server -replace ':\d+\z'
 		$serverPort = $Server -like '*:*' ? $Server : "${Server}:443"
 		$serialized =  'Q' |openssl s_client -servername $name -connect $serverPort 2>NUL |Out-String
-		$cert = New-Object X509Certificate2 (,[Text.Encoding]::UTF8.GetBytes($serialized))
-		$chain = New-Object X509Chain
+		$cert = New-Object Security.Cryptography.X509Certificates.X509Certificate2 (,[Text.Encoding]::UTF8.GetBytes($serialized))
+		$chain = New-Object Security.Cryptography.X509Certificates.X509Chain
 		[void]$chain.Build($cert)
 		$ext = @{}
-		$cert.Extensions |ForEach-Object {$ext.Add($_.Oid.FriendlyName, (New-Object AsnEncodedData $_.Oid, $_.RawData).Format($true).Trim())}
+		$cert.Extensions |ForEach-Object {$ext.Add($_.Oid.FriendlyName, (New-Object Security.Cryptography.AsnEncodedData $_.Oid, $_.RawData).Format($true).Trim())}
 		return [pscustomobject]@{
 			Server      = $Server
 			Subject     = $cert.Subject

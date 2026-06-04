@@ -36,7 +36,7 @@ HTTP/1.1 200 OK
 [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
 [Alias('Url','Href','Src')][uri] $Uri,
 # The HTTP method verb to use.
-[HttpMethod] $Method = 'GET',
+[Net.Http.HttpMethod] $Method = 'GET',
 # A file to log the request to.
 [string] $LogFile,
 # Indicates headers shouldn't be output.
@@ -47,8 +47,11 @@ HTTP/1.1 200 OK
 Begin
 {
     $certhost = @{}
-	#TODO: Add or replace dependency.
-    Import-CharConstants.ps1 :lock: :outbox_tray: :inbox_tray: :information_source: 'timer clock' -AsEmoji
+	$lock = "$([char]0xD83D)$([char]0xDD12)$([char]0xFE0F)" # :lock:/LOCK
+	$outbox_tray = "$([char]0xD83D)$([char]0xDCE4)$([char]0xFE0F)" # :outbox_tray:/OUTBOX TRAY
+	$inbox_tray = "$([char]0xD83D)$([char]0xDCE5)$([char]0xFE0F)" # :inbox_tray:/INBOX TRAY
+	$information_source = "$([char]0x2139)$([char]0xFE0F)" # :information_source:/INFORMATION SOURCE
+	${timer clock} = "$([char]0x23F2)$([char]0xFE0F)" # TIMER CLOCK
 
     filter Get-HttpStatusColor
     {
@@ -72,7 +75,7 @@ Begin
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
         [Alias('Url','Href','Src')][uri] $Uri,
         # The HTTP method verb to use.
-        [HttpMethod] $Method = 'GET'
+        [Net.Http.HttpMethod] $Method = 'GET'
         )
         if(!$certhost.Contains($Uri.Host))
         {
@@ -97,7 +100,7 @@ $requestRawHeaders
         Write-Debug $requestLine
         $StatusCode = 0
         Invoke-WebRequest -Uri $Uri -SkipHttpErrorCheck -MaximumRedirection 0 -AllowInsecureRedirect -EA Ignore |
-            Import-Variables.ps1 #TODO: Add or replace dependency.
+            Import-Variables
         if(!$StatusCode)
         {
             if($LogFile)

@@ -67,10 +67,10 @@ Begin
 			$suggestion = $disposition.FileName |Split-Path -Leaf
 		}
 		#TODO: Add or replace dependencies.
-		if($suggestion) {return $suggestion |ConvertTo-FileName.ps1}
-		elseif($null -ne $Uri.Segments -and $Uri.Segments.Count -gt 0) {return $Uri.Segments[-1] |ConvertTo-FileName.ps1}
-		elseif($Uri.Host) {return '{0}.saved' -f $Uri.Host |ConvertTo-FileName.ps1}
-		else {return "$Uri.saved" |Split-Path -Leaf |ConvertTo-FileName.ps1}
+		if($suggestion) {return $suggestion |ConvertTo-FileName}
+		elseif($null -ne $Uri.Segments -and $Uri.Segments.Count -gt 0) {return $Uri.Segments[-1] |ConvertTo-FileName}
+		elseif($Uri.Host) {return '{0}.saved' -f $Uri.Host |ConvertTo-FileName}
+		else {return "$Uri.saved" |Split-Path -Leaf |ConvertTo-FileName}
 	}
 }
 Process
