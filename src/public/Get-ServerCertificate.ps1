@@ -25,8 +25,24 @@ Chain       : System.Security.Cryptography.X509Certificates.X509Chain
 )
 Begin
 {
-	#TODO: Add or replace dependency.
-	Use-Command.ps1 openssl "$env:SystemRoot\openssl.exe" -cinst openssl.light
+	if(!(Get-Command openssl -Type Application -ErrorAction Ignore))
+	{
+		if($IsWindows)
+		{
+			if(Test-Path "$env:SystemRoot\openssl.exe" -Type Leaf)
+			{
+				Set-Alias openssl "$env:SystemRoot\openssl.exe"
+			}
+			else
+			{
+				throw 'Required "openssl" is not installed.'
+			}
+		}
+		else
+		{
+			throw 'Required "openssl" is not installed.'
+		}
+	}
 
 	filter Get-ServerCertificate
 	{

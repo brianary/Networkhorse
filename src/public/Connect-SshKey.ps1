@@ -13,10 +13,25 @@ Connect-SshKey crowpi -UserName pi
 [Alias('AsUserName')][string] $UserName = $env:UserName
 )
 
-if(!(Test-Path $env:USERPROFILE\.ssh\id_rsa.pub -Type Leaf) -or !((Get-Item $env:USERPROFILE\.ssh\id_rsa.pub).Length))
+$pubkeyfile = Join-Path $HOME .ssh id_rsa.pub
+if(!(Test-Path $pubkeyfile -Type Leaf) -or !((Get-Item $pubkeyfile).Length))
 {
-	#TODO: Add or replace dependency.
-	Use-Command.ps1 ssh-keygen "$env:SystemRoot\system32\openssh\ssh-keygen.exe" -WindowsFeature 'OpenSSH.Client~~~~0.0.1.0'
+	if(!(Get-Command ssh-keygen -Type Application -ErrorAction Ignore))
+	{
+		if($IsWindows)
+		{
+			if(Test-Path "$env:SystemRoot\system32\openssh\ssh-keygen.exe" -Type Leaf)
+			{
+				Set-Alias ssh-keygen "$env:SystemRoot\system32\openssh\ssh-keygen.exe"
+			}
+			else
+			{
+				throw 'Required "ssh-keygen" not found. To install, maybe run "Install-WindowsFeature OpenSSH.Client~~~~0.0.1.0"'
+			}
+		}
+		throw 'Required "ssh-keygen" not found, install it to continue.'
+	}
 	ssh-keygen
 }
-Get-Content $env:USERPROFILE\.ssh\id_rsa.pub |ssh "$UserName@$HostName" 'cat >> .ssh/authorized_keys'
+Get-Content $pubkeyfile |
+	ssh "$UserName@$HostName" 'cat >> .ssh/authorized_keys'

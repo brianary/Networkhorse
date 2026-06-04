@@ -10,7 +10,7 @@ BeforeAll {
 	Set-StrictMode -Version Latest
 	&"$PSScriptRoot/../scripts/Import-ThisModule.ps1"
 }
-Describe 'ConvertTo-BasicAuthentication' -Tag ConvertTo-BasicAuthentication -Skip:$skip {
+Describe 'ConvertTo-BasicAuthentication' -Tag ConvertTo-BasicAuthentication {
 	Context 'Produces a basic authentication header string from a credential' `
 		-Tag ConvertToBasicAuthentication,Convert,ConvertTo,BasicAuthentication,Authentication,Credential {
 		It "Credential '<UserName>' with password '<SingleFactor>' should return '<Result>'" -TestCases @(
