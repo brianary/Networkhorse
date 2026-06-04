@@ -56,7 +56,7 @@ Process
 			$filename = if($episode.PSObject.Properties.Match('episode')) {$episode.episode + ' '} else {''}
 			#TODO: Add or replace dependencies.
 			$filename += $title |ConvertTo-FileName
-			$filename += Split-Uri.ps1 $episode.enclosure.url -Extension
+			$filename += Split-Uri $episode.enclosure.url -Extension
 			Invoke-WebRequest $episode.enclosure.url -OutFile $filename
 			(Get-Item $filename).CreationTime = $episode.published
 		}

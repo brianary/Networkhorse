@@ -43,7 +43,7 @@ Tls12              : Aes128
 [Parameter(ValueFromPipelineByPropertyName=$true)][int]$Port = 443
 )
 #TODO: Add or replace dependency.
-Begin {$protocols = Get-EnumValues.ps1 Security.Authentication.SslProtocols |Where-Object Name -notin 'None','Default' |Select-Object -ExpandProperty Name}
+Begin {$protocols = Get-EnumValues Security.Authentication.SslProtocols |Where-Object Name -notin 'None','Default' |Select-Object -ExpandProperty Name}
 Process
 {
     $result = [ordered]@{
